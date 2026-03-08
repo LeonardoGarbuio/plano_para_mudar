@@ -4,8 +4,8 @@
 (function () {
   const pages = [
     { href: "index.html",        label: "Hábitos",   icon: "✅" },
-    { href: "meus_treinos.html", label: "Treinos",   icon: "💪" },
-    { href: "calculadora.html",  label: "IMC",       icon: "⚖️" },
+    { href: "plano_de_treino.html", label: "Treinos",   icon: "💪" },
+    { href: "calculadora_IMC.html",  label: "IMC",       icon: "⚖️" },
   ];
 
   // descobre qual página está ativa
