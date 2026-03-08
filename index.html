@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plano TDAH — Modo Deus Grego</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<div id="navbar"></div>
+<script src="nav.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #13131a;
+    --card: #1a1a24;
+    --border: #2a2a3a;
+    --accent: #e8ff47;
+    --accent2: #ff6b35;
+    --accent3: #47c8ff;
+    --text: #f0f0f5;
+    --muted: #6b6b80;
+    --green: #4eff91;
+    --red: #ff4e6a;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* NOISE TEXTURE */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HEADER */
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  .header .tag {
+    display: inline-block;
+    background: var(--accent);
+    color: #000;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+  }
+
+  .header h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 10vw, 88px);
+    line-height: 0.9;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+
+  .header h1 span { color: var(--accent); }
+
+  .header p {
+    color: var(--muted);
+    font-size: 16px;
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-title .icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .icon-sleep { background: #1a1a40; }
+  .icon-food { background: #1a2a1a; }
+  .icon-gym { background: #2a1a10; }
+  .icon-habit { background: #1a1a2a; }
+
+  /* CARDS */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 12px;
+    transition: border-color 0.2s, transform 0.2s;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .card:hover {
+    border-color: #3a3a50;
+    transform: translateY(-1px);
+  }
+
+  /* SLEEP SCHEDULE */
+  .sleep-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .sleep-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .sleep-item .time {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    letter-spacing: 2px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .sleep-item.sleep-time .time { color: var(--accent3); }
+  .sleep-item.wake-time .time { color: var(--accent); }
+  .sleep-item .label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+
+  .transition-plan {
+    background: var(--surface);
+    border-left: 3px solid var(--accent3);
+    border-radius: 0 8px 8px 0;
+    padding: 16px;
+  }
+
+  .transition-plan h4 {
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent3);
+    margin-bottom: 10px;
+  }
+
+  .transition-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+  }
+
+  .step .arrow { color: var(--accent); font-size: 12px; }
+  .step .step-time {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: var(--text);
+    min-width: 60px;
+  }
+
+  /* FOOD SECTION */
+  .food-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .food-col h4 {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .food-col.avoid h4 { color: var(--red); }
+  .food-col.keep h4 { color: var(--green); }
+
+  .food-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+
+  .food-col.avoid .food-item { background: rgba(255,78,106,0.08); }
+  .food-col.keep .food-item { background: rgba(78,255,145,0.08); }
+  .food-item .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .avoid .dot { background: var(--red); }
+  .keep .dot { background: var(--green); }
+
+  .meal-plan {
+    margin-top: 16px;
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+  }
+
+  .meal-plan h4 {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .meals {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+
+  .meal {
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+  }
+
+  .meal .meal-time {
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  .meal .meal-name {
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  /* EXERCISE */
+  .week-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
+  .day-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 6px;
+    text-align: center;
+  }
+
+  .day-block.active { border-color: var(--accent2); }
+  .day-block.karate { border-color: var(--accent3); }
+  .day-block.rest { opacity: 0.5; }
+
+  .day-block .day-name {
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .day-block .day-icon { font-size: 20px; margin-bottom: 4px; }
+
+  .day-block .day-label {
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .day-block.active .day-label { color: var(--accent2); }
+  .day-block.karate .day-label { color: var(--accent3); }
+
+  .ab-series {
+    background: linear-gradient(135deg, rgba(232,255,71,0.05), rgba(232,255,71,0.02));
+    border: 1px solid rgba(232,255,71,0.2);
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .ab-icon { font-size: 32px; }
+
+  .ab-info h4 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+    color: var(--accent);
+  }
+
+  .ab-info p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+  /* HABIT TRACKER */
+  .habits-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .habit-row {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+  }
+
+  .habit-row:hover { border-color: #3a3a50; }
+  .habit-row.checked { border-color: var(--green); background: rgba(78,255,145,0.05); }
+
+  .habit-checkbox {
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    font-size: 13px;
+  }
+
+  .habit-row.checked .habit-checkbox {
+    background: var(--green);
+    border-color: var(--green);
+    color: #000;
+  }
+
+  .habit-text { flex: 1; font-size: 14px; }
+  .habit-row.checked .habit-text { text-decoration: line-through; color: var(--muted); }
+  .habit-emoji { font-size: 18px; }
+  .habit-tag {
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-weight: 600;
+  }
+
+  .tag-sleep { background: rgba(71,200,255,0.15); color: var(--accent3); }
+  .tag-food { background: rgba(78,255,145,0.15); color: var(--green); }
+  .tag-exercise { background: rgba(255,107,53,0.15); color: var(--accent2); }
+
+  /* REGRA DE OURO */
+  .golden-rule {
+    background: linear-gradient(135deg, rgba(232,255,71,0.08), rgba(232,255,71,0.02));
+    border: 1px solid rgba(232,255,71,0.3);
+    border-radius: 12px;
+    padding: 28px;
+    text-align: center;
+    margin-top: 32px;
+    animation: fadeUp 0.6s 0.4s ease both;
+  }
+
+  .golden-rule h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .golden-rule p { color: var(--muted); font-size: 15px; max-width: 500px; margin: 0 auto; line-height: 1.6; }
+
+  /* PROGRESS BAR */
+  .progress-bar-wrap {
+    margin-top: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+
+  .progress-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .progress-label { font-size: 13px; color: var(--muted); }
+  .progress-pct { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--accent); }
+
+  .progress-track {
+    height: 8px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 4px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  /* SECTIONS */
+  .section { margin-bottom: 36px; animation: fadeUp 0.5s ease both; }
+  .section:nth-child(2) { animation-delay: 0.1s; }
+  .section:nth-child(3) { animation-delay: 0.2s; }
+  .section:nth-child(4) { animation-delay: 0.3s; }
+
+  /* ANIMATIONS */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .sleep-grid, .food-cols { grid-template-columns: 1fr; }
+    .meals { grid-template-columns: repeat(2, 1fr); }
+    .week-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="tag">⚡ Plano TDAH — Modo Ativado</div>
+    <h1>CORPO DE<br><span>DEUS GREGO</span></h1>
+    <p>Plano direto ao ponto. Sem enrolação. Feito para o seu cérebro. Marque os hábitos do dia abaixo.</p>
+  </div>
+
+  <!-- SONO -->
+  <div class="section">
+    <div class="section-title">
+      <div class="icon icon-sleep">🌙</div>
+      SONO — RECONSTRUÇÃO
+    </div>
+    <div class="card">
+      <div class="sleep-grid">
+        <div class="sleep-item sleep-time">
+          <div class="time">00:30</div>
+          <div class="label">🎯 Meta: Dormir</div>
+        </div>
+        <div class="sleep-item wake-time">
+          <div class="time">08:00</div>
+          <div class="label">🌅 Meta: Acordar</div>
+        </div>
+      </div>
+      <div class="transition-plan">
+        <h4>📅 Plano de transição (4 semanas)</h4>
+        <div class="transition-steps">
+          <div class="step">
+            <span class="step-time">Sem 1</span>
+            <span class="arrow">→</span>
+            <span>Dormir 3h → Acordar 10h30</span>
+          </div>
+          <div class="step">
+            <span class="step-time">Sem 2</span>
+            <span class="arrow">→</span>
+            <span>Dormir 2h → Acordar 9h30</span>
+          </div>
+          <div class="step">
+            <span class="step-time">Sem 3</span>
+            <span class="arrow">→</span>
+            <span>Dormir 1h → Acordar 8h30</span>
+          </div>
+          <div class="step">
+            <span class="step-time">Sem 4+</span>
+            <span class="arrow">→</span>
+            <span>Dormir 00h30 → Acordar 8h 🔥</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMIDA -->
+  <div class="section">
+    <div class="section-title">
+      <div class="icon icon-food">🥗</div>
+      ALIMENTAÇÃO — CORTE E GANHO
+    </div>
+    <div class="card">
+      <div class="food-cols">
+        <div class="food-col avoid">
+          <h4>❌ Eliminar agora</h4>
+          <div class="food-item"><span class="dot"></span>Salgadinho diário</div>
+          <div class="food-item"><span class="dot"></span>Refrigerante</div>
+          <div class="food-item"><span class="dot"></span>Chocolate em excesso</div>
+          <div class="food-item"><span class="dot"></span>Porções gigantes</div>
+        </div>
+        <div class="food-col keep">
+          <h4>✅ Substituir por</h4>
+          <div class="food-item"><span class="dot"></span>Castanhas / amendoim</div>
+          <div class="food-item"><span class="dot"></span>Água com gás / limão</div>
+          <div class="food-item"><span class="dot"></span>Chocolate 70%+ (1 quadrado)</div>
+          <div class="food-item"><span class="dot"></span>Prato médio + proteína</div>
+        </div>
+      </div>
+      <div class="meal-plan">
+        <h4>🍽️ Distribuição das refeições</h4>
+        <div class="meals">
+          <div class="meal">
+            <div class="meal-time">Café ☀️</div>
+            <div class="meal-name">Ovos + Fruta</div>
+          </div>
+          <div class="meal">
+            <div class="meal-time">Almoço 🥩</div>
+            <div class="meal-name">Arroz + Proteína</div>
+          </div>
+          <div class="meal">
+            <div class="meal-time">Lanche 🥜</div>
+            <div class="meal-name">Castanhas</div>
+          </div>
+          <div class="meal">
+            <div class="meal-time">Jantar 🥗</div>
+            <div class="meal-name">Leve + Verdura</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXERCÍCIOS -->
+  <div class="section">
+    <div class="section-title">
+      <div class="icon icon-gym">💪</div>
+      EXERCÍCIOS — ROTINA SEMANAL
+    </div>
+    <div class="card">
+      <div class="week-grid">
+        <div class="day-block active">
+          <div class="day-name">SEG</div>
+          <div class="day-icon">🏋️</div>
+          <div class="day-label">Academia</div>
+        </div>
+        <div class="day-block karate">
+          <div class="day-name">TER</div>
+          <div class="day-icon">🥋</div>
+          <div class="day-label">Karatê</div>
+        </div>
+        <div class="day-block active">
+          <div class="day-name">QUA</div>
+          <div class="day-icon">🏋️</div>
+          <div class="day-label">Academia</div>
+        </div>
+        <div class="day-block karate">
+          <div class="day-name">QUI</div>
+          <div class="day-icon">🥋</div>
+          <div class="day-label">Karatê</div>
+        </div>
+        <div class="day-block active">
+          <div class="day-name">SEX</div>
+          <div class="day-icon">🏋️</div>
+          <div class="day-label">Academia</div>
+        </div>
+        <div class="day-block karate">
+          <div class="day-name">SÁB</div>
+          <div class="day-icon">🥋</div>
+          <div class="day-label">Karatê</div>
+        </div>
+        <div class="day-block rest">
+          <div class="day-name">DOM</div>
+          <div class="day-icon">😴</div>
+          <div class="day-label">Descanso</div>
+        </div>
+      </div>
+      <div class="ab-series">
+        <div class="ab-icon">🔥</div>
+        <div class="ab-info">
+          <h4>SÉRIE DE ABDOMINAIS DIÁRIA</h4>
+          <p>Todo dia, sem exceção — mesmo nos dias de descanso. 3 séries de 20 repetições, logo depois de acordar. Menos de 5 minutos. Sem desculpa.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST DIÁRIO -->
+  <div class="section">
+    <div class="section-title">
+      <div class="icon icon-habit">✅</div>
+      CHECKLIST DO DIA — CLIQUE PARA MARCAR
+    </div>
+    <div class="card">
+      <div class="habits-list" id="habits">
+
+        <div class="habit-row" onclick="toggleHabit(this)">
+          <div class="habit-checkbox"></div>
+          <div class="habit-emoji">🌙</div>
+          <div class="habit-text">Fui dormir no horário planejado</div>
+          <span class="habit-tag tag-sleep">Sono</span>
+        </div>
+
+        <div class="habit-row" onclick="toggleHabit(this)">
+          <div class="habit-checkbox"></div>
+          <div class="habit-emoji">☀️</div>
+          <div class="habit-text">Acordei no horário planejado</div>
+          <span class="habit-tag tag-sleep">Sono</span>
+        </div>
+
+        <div class="habit-row" onclick="toggleHabit(this)">
+          <div class="habit-checkbox"></div>
+          <div class="habit-emoji">🔥</div>
+          <div class="habit-text">Fiz a série de abdominais</div>
+          <span class="habit-tag tag-exercise">Exercício</span>
+        </div>
+
+        <div class="habit-row" onclick="toggleHabit(this)">
+          <div class="habit-checkbox"></div>
+          <div class="habit-emoji">🥤</div>
+          <div class="habit-text">Bebi pelo menos 2L de água</div>
+          <span class="habit-tag tag-food">Comida</span>
+        </div>
+
+        <div class="habit-row" onclick="toggleHabit(this)">
+          <div class="habit-checkbox"></div>
+          <div class="habit-emoji">🚫</div>
+          <div class="habit-text">Não tomei refrigerante hoje</div>
+          <span class="habit-tag tag-food">Comida</span>
+        </div>
+
+        <div class="habit-row" onclick="toggleHabit(this)">
+          <div class="habit-checkbox"></div>
+          <div class="habit-emoji">🥗</div>
+          <div class="habit-text">Comi nas 4 refeições planejadas</div>
+          <span class="habit-tag tag-food">Comida</span>
+        </div>
+
+        <div class="habit-row" onclick="toggleHabit(this)">
+          <div class="habit-checkbox"></div>
+          <div class="habit-emoji">🏋️</div>
+          <div class="habit-text">Fui para academia / karatê (se o dia pede)</div>
+          <span class="habit-tag tag-exercise">Exercício</span>
+        </div>
+
+        <div class="habit-row" onclick="toggleHabit(this)">
+          <div class="habit-checkbox"></div>
+          <div class="habit-emoji">📵</div>
+          <div class="habit-text">Parei de usar o celular 30min antes de dormir</div>
+          <span class="habit-tag tag-sleep">Sono</span>
+        </div>
+
+      </div>
+
+      <!-- PROGRESS -->
+      <div class="progress-bar-wrap">
+        <div class="progress-top">
+          <span class="progress-label">Progresso do dia</span>
+          <span class="progress-pct" id="pct">0%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="fill"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REGRA DE OURO -->
+  <div class="golden-rule">
+    <h2>⚡ REGRA DE OURO</h2>
+    <p>Não precisa ser perfeito. Precisa ser <strong style="color: var(--accent);">consistente</strong>. Um hábito ruim menos por dia já é vitória. Faz o checklist todo dia e em 30 dias você não vai reconhecer o espelho.</p>
+  </div>
+
+</div>
+
+<script>
+  function toggleHabit(el) {
+    el.classList.toggle('checked');
+    const check = el.querySelector('.habit-checkbox');
+    check.textContent = el.classList.contains('checked') ? '✓' : '';
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const total = document.querySelectorAll('.habit-row').length;
+    const done = document.querySelectorAll('.habit-row.checked').length;
+    const pct = Math.round((done / total) * 100);
+    document.getElementById('pct').textContent = pct + '%';
+    document.getElementById('fill').style.width = pct + '%';
+  }
+</script>
+</body>
+</html>

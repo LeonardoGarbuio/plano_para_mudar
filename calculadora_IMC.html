@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IMC — Corpo Grego</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<div id="navbar"></div>
+<script src="nav.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a12;
+    --surface: #11111e;
+    --card: #16162a;
+    --border: #22223a;
+    --accent: #e8ff47;
+    --text: #f0f0f8;
+    --muted: #5a5a7a;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px 60px;
+  }
+
+  .header { text-align: center; margin-bottom: 36px; animation: fadeDown 0.5s ease both; }
+  .header .tag {
+    display: inline-block;
+    background: var(--accent);
+    color: #000;
+    font-weight: 800;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 2px;
+    margin-bottom: 14px;
+  }
+  .header h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 10vw, 80px);
+    letter-spacing: 3px;
+    line-height: 0.95;
+    margin-bottom: 8px;
+  }
+  .header h1 span { color: var(--accent); }
+  .header p { color: var(--muted); font-size: 14px; }
+
+  .main { width: 100%; max-width: 500px; }
+
+  /* INPUTS */
+  .input-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 16px;
+    animation: fadeUp 0.4s ease both;
+  }
+
+  .input-group { margin-bottom: 20px; }
+  .input-group:last-child { margin-bottom: 0; }
+
+  .input-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--muted);
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .input-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .slider-wrap { flex: 1; position: relative; }
+
+  input[type="range"] {
+    width: 100%;
+    -webkit-appearance: none;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--border);
+    outline: none;
+    cursor: pointer;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(232,255,71,0.4);
+    transition: box-shadow 0.2s;
+  }
+
+  input[type="range"]::-webkit-slider-thumb:hover {
+    box-shadow: 0 0 20px rgba(232,255,71,0.7);
+  }
+
+  .val-display {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 1px;
+    color: var(--accent);
+    min-width: 70px;
+    text-align: right;
+    line-height: 1;
+  }
+
+  .val-display span { font-size: 14px; color: var(--muted); font-family: 'Plus Jakarta Sans', sans-serif; }
+
+  /* RESULT CARD */
+  .result-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 16px;
+    animation: fadeUp 0.5s 0.1s ease both;
+    text-align: center;
+  }
+
+  .imc-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 88px;
+    letter-spacing: 2px;
+    line-height: 1;
+    margin-bottom: 4px;
+    transition: color 0.4s;
+  }
+
+  .imc-label {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    transition: color 0.4s;
+  }
+
+  /* GAUGE */
+  .gauge-wrap { margin: 20px 0; position: relative; }
+
+  .gauge-bar {
+    height: 10px;
+    border-radius: 5px;
+    background: linear-gradient(to right,
+      #3498db 0%,      /* abaixo do peso */
+      #3498db 18.5%,
+      #2ecc71 18.5%,   /* normal */
+      #2ecc71 25%,
+      #f39c12 25%,     /* sobrepeso */
+      #f39c12 30%,
+      #e74c3c 30%,     /* obesidade */
+      #e74c3c 100%
+    );
+    position: relative;
+    margin-bottom: 6px;
+  }
+
+  .gauge-needle {
+    position: absolute;
+    top: -4px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #fff;
+    border: 3px solid #000;
+    transform: translateX(-50%);
+    transition: left 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 0 12px rgba(255,255,255,0.3);
+  }
+
+  .gauge-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+  }
+
+  /* STATS GRID */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .stat-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+  }
+
+  .stat-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    line-height: 1;
+    margin-bottom: 3px;
+  }
+
+  .stat-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
+
+  /* META CARD */
+  .meta-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 16px;
+    animation: fadeUp 0.5s 0.2s ease both;
+  }
+
+  .meta-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+    color: var(--accent);
+  }
+
+  .meta-goal-display {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+  }
+
+  .meta-goal-kg {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .meta-goal-info { text-align: right; }
+  .meta-goal-info .diff {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    margin-bottom: 2px;
+  }
+  .meta-goal-info .diff-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+
+  /* PROGRESS */
+  .progress-section { margin-top: 4px; }
+  .prog-top { display: flex; justify-content: space-between; margin-bottom: 8px; }
+  .prog-label { font-size: 12px; color: var(--muted); font-weight: 600; }
+  .prog-pct { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--accent); }
+
+  .prog-track {
+    height: 8px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+
+  .prog-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), #7fff00);
+    border-radius: 4px;
+    transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .prog-ends {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* IDEAL RANGE */
+  .ideal-range {
+    background: rgba(232,255,71,0.05);
+    border: 1px solid rgba(232,255,71,0.2);
+    border-radius: 10px;
+    padding: 16px;
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .ideal-icon { font-size: 28px; }
+  .ideal-text { font-size: 13px; color: #ccc; line-height: 1.6; }
+  .ideal-text b { color: var(--accent); }
+
+  /* CLASSIFICATION TABLE */
+  .classif-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px 28px;
+    animation: fadeUp 0.5s 0.3s ease both;
+  }
+
+  .classif-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+
+  .classif-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border-radius: 6px;
+    margin-bottom: 4px;
+    transition: background 0.2s;
+  }
+
+  .classif-row.active-row { background: rgba(255,255,255,0.05); }
+
+  .classif-left { display: flex; align-items: center; gap: 10px; }
+  .classif-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .classif-name { font-size: 13px; font-weight: 600; }
+  .classif-range { font-size: 12px; color: var(--muted); }
+  .classif-you { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 400px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .imc-number { font-size: 68px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="tag">💪 Rastreador de Progresso</div>
+  <h1>MEU<br><span>IMC</span></h1>
+  <p>Acompanha sua evolução até o peso ideal</p>
+</div>
+
+<div class="main">
+
+  <!-- INPUTS -->
+  <div class="input-card">
+    <div class="input-group">
+      <label class="input-label">📏 Altura</label>
+      <div class="input-row">
+        <div class="slider-wrap">
+          <input type="range" id="altura" min="140" max="220" value="182" oninput="calcular()">
+        </div>
+        <div class="val-display" id="val-altura">182 <span>cm</span></div>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label class="input-label">⚖️ Peso atual</label>
+      <div class="input-row">
+        <div class="slider-wrap">
+          <input type="range" id="peso" min="40" max="180" value="83" step="0.5" oninput="calcular()">
+        </div>
+        <div class="val-display" id="val-peso">83 <span>kg</span></div>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label class="input-label">🎯 Meta de peso</label>
+      <div class="input-row">
+        <div class="slider-wrap">
+          <input type="range" id="meta" min="40" max="180" value="75" step="0.5" oninput="calcular()">
+        </div>
+        <div class="val-display" id="val-meta">75 <span>kg</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTADO -->
+  <div class="result-card">
+    <div class="imc-number" id="imc-num">25.1</div>
+    <div class="imc-label" id="imc-label">Sobrepeso</div>
+
+    <div class="gauge-wrap">
+      <div class="gauge-bar">
+        <div class="gauge-needle" id="needle"></div>
+      </div>
+      <div class="gauge-labels">
+        <span>Baixo</span>
+        <span>Normal</span>
+        <span>Sobrepeso</span>
+        <span>Obeso</span>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-val" id="st-peso" style="color:#e8ff47">—</div>
+        <div class="stat-label">Peso atual</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val" id="st-imc-ideal" style="color:#2ecc71">—</div>
+        <div class="stat-label">IMC ideal</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val" id="st-perder" style="color:#ff6b6b">—</div>
+        <div class="stat-label">Kg p/ meta</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- META -->
+  <div class="meta-card">
+    <div class="meta-title">🎯 Progresso até a meta</div>
+
+    <div class="meta-goal-display">
+      <div>
+        <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Meu objetivo</div>
+        <div class="meta-goal-kg" id="meta-display">75 kg</div>
+      </div>
+      <div class="meta-goal-info">
+        <div class="diff" id="diff-display" style="color:#ff6b6b">— kg</div>
+        <div class="diff-label">restam</div>
+      </div>
+    </div>
+
+    <div class="progress-section">
+      <div class="prog-top">
+        <span class="prog-label">Progresso</span>
+        <span class="prog-pct" id="prog-pct">0%</span>
+      </div>
+      <div class="prog-track">
+        <div class="prog-fill" id="prog-fill" style="width:0%"></div>
+      </div>
+      <div class="prog-ends">
+        <span id="prog-start">— kg</span>
+        <span id="prog-end">— kg</span>
+      </div>
+    </div>
+
+    <div class="ideal-range">
+      <div class="ideal-icon">⚖️</div>
+      <div class="ideal-text" id="ideal-text">
+        Para a sua altura, o peso ideal fica entre <b>— e — kg</b> (IMC 18.5–24.9).
+      </div>
+    </div>
+  </div>
+
+  <!-- TABELA -->
+  <div class="classif-card">
+    <div class="classif-title">CLASSIFICAÇÃO DO IMC</div>
+
+    <div class="classif-row" id="row-baixo">
+      <div class="classif-left">
+        <div class="classif-dot" style="background:#3498db"></div>
+        <div>
+          <div class="classif-name" style="color:#3498db">Abaixo do peso</div>
+          <div class="classif-range">IMC &lt; 18.5</div>
+        </div>
+      </div>
+      <div class="classif-you" id="you-baixo"></div>
+    </div>
+
+    <div class="classif-row" id="row-normal">
+      <div class="classif-left">
+        <div class="classif-dot" style="background:#2ecc71"></div>
+        <div>
+          <div class="classif-name" style="color:#2ecc71">Peso normal ✅</div>
+          <div class="classif-range">IMC 18.5 – 24.9</div>
+        </div>
+      </div>
+      <div class="classif-you" id="you-normal"></div>
+    </div>
+
+    <div class="classif-row" id="row-sobre">
+      <div class="classif-left">
+        <div class="classif-dot" style="background:#f39c12"></div>
+        <div>
+          <div class="classif-name" style="color:#f39c12">Sobrepeso</div>
+          <div class="classif-range">IMC 25.0 – 29.9</div>
+        </div>
+      </div>
+      <div class="classif-you" id="you-sobre"></div>
+    </div>
+
+    <div class="classif-row" id="row-obeso">
+      <div class="classif-left">
+        <div class="classif-dot" style="background:#e74c3c"></div>
+        <div>
+          <div class="classif-name" style="color:#e74c3c">Obesidade</div>
+          <div class="classif-range">IMC ≥ 30.0</div>
+        </div>
+      </div>
+      <div class="classif-you" id="you-obeso"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function calcular() {
+    const h = parseFloat(document.getElementById('altura').value);
+    const p = parseFloat(document.getElementById('peso').value);
+    const m = parseFloat(document.getElementById('meta').value);
+
+    // displays
+    document.getElementById('val-altura').innerHTML = `${h} <span>cm</span>`;
+    document.getElementById('val-peso').innerHTML = `${p} <span>kg</span>`;
+    document.getElementById('val-meta').innerHTML = `${m} <span>kg</span>`;
+
+    const hm = h / 100;
+    const imc = p / (hm * hm);
+    const imcMeta = m / (hm * hm);
+
+    // IMC display
+    document.getElementById('imc-num').textContent = imc.toFixed(1);
+
+    let cor, label;
+    if (imc < 18.5) { cor = '#3498db'; label = 'Abaixo do peso'; }
+    else if (imc < 25) { cor = '#2ecc71'; label = 'Peso normal ✅'; }
+    else if (imc < 30) { cor = '#f39c12'; label = 'Sobrepeso'; }
+    else { cor = '#e74c3c'; label = 'Obesidade'; }
+
+    document.getElementById('imc-num').style.color = cor;
+    document.getElementById('imc-label').style.color = cor;
+    document.getElementById('imc-label').textContent = label;
+
+    // Needle position (IMC 10 to 45 mapped to 0-100%)
+    const pct = Math.min(Math.max((imc - 10) / 35 * 100, 2), 98);
+    document.getElementById('needle').style.left = pct + '%';
+
+    // stats
+    document.getElementById('st-peso').textContent = p.toFixed(1) + ' kg';
+    document.getElementById('st-imc-ideal').textContent = '18.5–24.9';
+    const diff = p - m;
+    document.getElementById('st-perder').textContent = diff > 0 ? '-' + diff.toFixed(1) + ' kg' : diff < 0 ? '+' + Math.abs(diff).toFixed(1) + ' kg' : '✓ Meta!';
+    document.getElementById('st-perder').style.color = diff > 0 ? '#ff6b6b' : diff < 0 ? '#3498db' : '#2ecc71';
+
+    // meta progress
+    document.getElementById('meta-display').textContent = m.toFixed(1) + ' kg';
+    document.getElementById('diff-display').textContent = diff > 0 ? diff.toFixed(1) + ' kg restam' : diff < 0 ? Math.abs(diff).toFixed(1) + ' kg abaixo' : '🎯 Chegou!';
+    document.getElementById('diff-display').style.color = diff > 0 ? '#ff6b6b' : diff <= 0 ? '#2ecc71' : '#e8ff47';
+
+    // assume starting weight = current max slider or just use p as baseline
+    // progress: how far from a "starting" point (we use a stored initial or just show current/goal ratio)
+    const maxPeso = 120; // assume started heavier side
+    let progresso;
+    if (diff <= 0) {
+      progresso = 100;
+    } else {
+      // progress based on how close p is to m, relative to a "start"
+      const start = Math.max(p, m + diff);
+      progresso = Math.max(0, Math.min(100, (1 - (diff / Math.abs(p - m + 0.001))) * 100));
+      // simpler: just show IMC progress toward normal
+      const imcStart = 30; // assume started obese/sobrepeso
+      const imcGoal = imcMeta;
+      const imcNow = imc;
+      if (imcNow <= imcGoal) progresso = 100;
+      else progresso = Math.max(0, Math.min(99, (1 - (imcNow - imcGoal) / (imcStart - imcGoal)) * 100));
+    }
+
+    document.getElementById('prog-pct').textContent = Math.round(progresso) + '%';
+    document.getElementById('prog-fill').style.width = progresso + '%';
+    document.getElementById('prog-start').textContent = 'Atual: ' + p.toFixed(1) + 'kg';
+    document.getElementById('prog-end').textContent = 'Meta: ' + m.toFixed(1) + 'kg';
+
+    // ideal range
+    const pesoMinIdeal = (18.5 * hm * hm).toFixed(1);
+    const pesoMaxIdeal = (24.9 * hm * hm).toFixed(1);
+    document.getElementById('ideal-text').innerHTML =
+      `Para ${h}cm, seu peso ideal fica entre <b>${pesoMinIdeal} e ${pesoMaxIdeal} kg</b> (IMC 18.5–24.9).`;
+
+    // classification highlight
+    ['baixo','normal','sobre','obeso'].forEach(k => {
+      document.getElementById('row-' + k).classList.remove('active-row');
+      document.getElementById('you-' + k).textContent = '';
+    });
+
+    let activeKey;
+    if (imc < 18.5) activeKey = 'baixo';
+    else if (imc < 25) activeKey = 'normal';
+    else if (imc < 30) activeKey = 'sobre';
+    else activeKey = 'obeso';
+
+    document.getElementById('row-' + activeKey).classList.add('active-row');
+    document.getElementById('you-' + activeKey).textContent = '← você';
+  }
+
+  calcular();
+</script>
+</body>
+</html>

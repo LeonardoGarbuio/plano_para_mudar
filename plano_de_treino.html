@@ -1,0 +1,1654 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Treinos Estéticos — Corpo Grego</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<div id="navbar"></div>
+<script src="nav.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0c0c14;
+    --surface: #12121e;
+    --card: #16162a;
+    --border: #252540;
+    --A: #ff4757;
+    --B: #2ed9c3;
+    --C: #ffa502;
+    --D: #a55eea;
+    --text: #f0f0f8;
+    --muted: #606080;
+    --muted2: #303050;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* BANNER */
+  .banner {
+    background: linear-gradient(90deg, #ff4757 0%, #a55eea 50%, #2ed9c3 100%);
+    padding: 10px 24px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #fff;
+  }
+
+  /* PROFILE */
+  .profile-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+  }
+
+  .profile-inner {
+    max-width: 980px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .profile-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .profile-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff4757, #a55eea);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+
+  .profile-name { font-size: 14px; font-weight: 700; }
+  .profile-sub { font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+  .profile-stats { display: flex; gap: 20px; }
+
+  .pstat { text-align: center; }
+  .pstat-val { font-family: 'Bebas Neue', sans-serif; font-size: 20px; line-height: 1; }
+  .pstat-label { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-top: 1px; }
+
+  /* WEEK VIEW */
+  .week-section {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 24px 24px 0;
+  }
+
+  .week-title {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .week-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  .wday {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 4px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .wday.karate { border-color: #ffa502; opacity: 0.7; cursor: default; }
+  .wday.rest { opacity: 0.35; cursor: default; }
+  .wday.active-A { border-color: var(--A); background: rgba(255,71,87,0.08); }
+  .wday.active-B { border-color: var(--B); background: rgba(46,217,195,0.08); }
+  .wday.active-C { border-color: var(--C); background: rgba(255,165,2,0.08); }
+  .wday.active-D { border-color: var(--D); background: rgba(165,94,234,0.08); }
+
+  .wday .wday-name { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .wday .wday-icon { font-size: 20px; margin-bottom: 4px; }
+  .wday .wday-label { font-size: 9px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+  .wday.active-A .wday-label { color: var(--A); }
+  .wday.active-B .wday-label { color: var(--B); }
+  .wday.active-C .wday-label { color: var(--C); }
+  .wday.active-D .wday-label { color: var(--D); }
+  .wday.karate .wday-label { color: var(--C); }
+
+  /* TABS */
+  .tabs-wrapper {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tabs {
+    max-width: 980px;
+    margin: 0 auto;
+    display: flex;
+    padding: 0 24px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .tabs::-webkit-scrollbar { display: none; }
+
+  .tab {
+    flex-shrink: 0;
+    padding: 16px 20px;
+    cursor: pointer;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    border-bottom: 3px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.2s;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tab-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+  .tab:hover { color: var(--text); }
+  .tab.active[data-t="A"] { color: var(--A); border-color: var(--A); }
+  .tab.active[data-t="B"] { color: var(--B); border-color: var(--B); }
+  .tab.active[data-t="C"] { color: var(--C); border-color: var(--C); }
+  .tab.active[data-t="D"] { color: var(--D); border-color: var(--D); }
+
+  /* CONTAINER */
+  .container { max-width: 980px; margin: 0 auto; padding: 36px 24px 80px; }
+
+  .panel { display: none; }
+  .panel.active { display: block; animation: fadeUp 0.35s ease both; }
+
+  /* TREINO HEADER */
+  .treino-header {
+    margin-bottom: 28px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .header-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; margin-bottom: 16px; }
+
+  .treino-tag {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase; font-weight: 700; margin-bottom: 8px;
+  }
+  .tag-A { color: var(--A); }
+  .tag-B { color: var(--B); }
+  .tag-C { color: var(--C); }
+  .tag-D { color: var(--D); }
+
+  .treino-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(38px, 6vw, 60px);
+    letter-spacing: 2px;
+    line-height: 0.95;
+    margin-bottom: 12px;
+  }
+
+  .treino-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .tpill {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .header-stats { display: flex; gap: 12px; }
+
+  .hstat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+    text-align: center;
+    min-width: 80px;
+  }
+
+  .hstat-val { font-family: 'Bebas Neue', sans-serif; font-size: 32px; line-height: 1; margin-bottom: 2px; }
+  .hstat-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+
+  /* SCIENCE */
+  .science-box {
+    background: rgba(255,215,0,0.04);
+    border: 1px solid rgba(255,215,0,0.15);
+    border-left: 3px solid gold;
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    font-size: 13px;
+    color: #aaa;
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+  .science-box b { color: #ffd700; }
+
+  /* WARMUP */
+  .warmup {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 28px;
+    font-size: 13px;
+    color: #aaa;
+    line-height: 1.7;
+  }
+  .warmup strong { display: block; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: gold; font-weight: 700; margin-bottom: 6px; }
+
+  /* GROUP */
+  .ex-group { margin-bottom: 32px; }
+
+  .group-header {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+  }
+  .gbar { width: 3px; height: 18px; border-radius: 2px; flex-shrink: 0; }
+  .gbar-A { background: var(--A); }
+  .gbar-B { background: var(--B); }
+  .gbar-C { background: var(--C); }
+  .gbar-D { background: var(--D); }
+  .glabel { font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; font-weight: 700; color: var(--muted); }
+
+  /* EX CARD */
+  .ex-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.15s;
+  }
+
+  .ex-card:hover { transform: translateY(-1px); }
+  .ex-card.open { border-color: var(--muted); }
+
+  .ex-main {
+    display: grid;
+    grid-template-columns: 44px 1fr auto;
+    align-items: center;
+    padding: 15px 18px;
+    cursor: pointer;
+    gap: 4px;
+  }
+
+  .ex-num { font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--muted2); line-height: 1; }
+  .ex-info { padding-left: 4px; }
+  .ex-name { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+  .ex-sub { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+
+  .intensity {
+    display: flex; gap: 3px; align-items: center;
+  }
+  .idot { width: 5px; height: 5px; border-radius: 50%; background: var(--border); }
+  .idot.on { background: currentColor; }
+
+  .ex-right { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; flex-shrink: 0; }
+  .ex-sets { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 1px; line-height: 1; }
+  .ex-rest { font-size: 10px; color: var(--muted); font-weight: 600; }
+
+  /* TIP */
+  .ex-tip {
+    display: none;
+    padding: 14px 18px 18px 66px;
+    border-top: 1px solid var(--border);
+    background: rgba(0,0,0,0.2);
+  }
+
+  .ex-card.open .ex-tip { display: block; animation: fadeDown 0.2s ease both; }
+
+  .tip-text {
+    font-size: 13px;
+    color: #999;
+    line-height: 1.75;
+    margin-bottom: 14px;
+  }
+  .tip-text b { color: #ddd; }
+
+  .tip-cue {
+    display: inline-block;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 11px;
+    color: #bbb;
+    margin: 2px 2px 2px 0;
+    font-weight: 600;
+  }
+
+  /* SETS TRACKER */
+  .tracker { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
+  .tlabel { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); font-weight: 700; margin-right: 4px; }
+
+  .sbtn {
+    width: 32px; height: 32px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 12px; font-weight: 700;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    flex-shrink: 0;
+  }
+
+  .sbtn:hover { border-color: var(--muted); color: var(--text); }
+  .sbtn.done-A { background: var(--A); border-color: var(--A); color: #fff; }
+  .sbtn.done-B { background: var(--B); border-color: var(--B); color: #000; }
+  .sbtn.done-C { background: var(--C); border-color: var(--C); color: #000; }
+  .sbtn.done-D { background: var(--D); border-color: var(--D); color: #fff; }
+
+  /* SUPERSET BADGE */
+  .superset-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(165,94,234,0.1);
+    border: 1px solid rgba(165,94,234,0.3);
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--D);
+    margin-left: 8px;
+  }
+
+  /* TOTAL CARD */
+  .total-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .total-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    text-align: center;
+  }
+
+  .total-val { font-family: 'Bebas Neue', sans-serif; font-size: 32px; line-height: 1; margin-bottom: 2px; }
+  .total-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+
+  /* PROGRESSION NOTE */
+  .progression {
+    margin-top: 28px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .prog-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; margin-bottom: 12px; }
+  .prog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .prog-item { text-align: center; }
+  .prog-week { font-family: 'Bebas Neue', sans-serif; font-size: 16px; color: var(--muted); margin-bottom: 4px; }
+  .prog-val { font-size: 12px; color: #bbb; line-height: 1.5; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 560px) {
+    .ex-main { grid-template-columns: 36px 1fr auto; padding: 13px 14px; }
+    .ex-tip { padding-left: 50px; }
+    .total-row { grid-template-columns: repeat(2, 1fr); }
+    .prog-grid { grid-template-columns: 1fr; }
+    .header-stats { flex-wrap: wrap; }
+    .profile-stats { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="banner">⚡ Mesomorfo 1.82m · 83kg · Foco Estético — Volume + Definição</div>
+
+<!-- PROFILE -->
+<div class="profile-bar">
+  <div class="profile-inner">
+    <div class="profile-info">
+      <div class="profile-avatar">🏛️</div>
+      <div>
+        <div class="profile-name">Programa Corpo Grego</div>
+        <div class="profile-sub">Push · Pull · Legs · Full — 4 dias/semana</div>
+      </div>
+    </div>
+    <div class="profile-stats">
+      <div class="pstat"><div class="pstat-val" style="color:var(--A)">4</div><div class="pstat-label">Treinos/sem</div></div>
+      <div class="pstat"><div class="pstat-val" style="color:var(--B)">2</div><div class="pstat-label">Karatê/sem</div></div>
+      <div class="pstat"><div class="pstat-val" style="color:var(--C)">1</div><div class="pstat-label">Descanso</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- WEEK -->
+<div class="week-section">
+  <div class="week-title">📅 Sua semana</div>
+  <div class="week-grid">
+    <div class="wday karate"><div class="wday-name">SEG</div><div class="wday-icon">🥋</div><div class="wday-label">Karatê</div></div>
+    <div class="wday active-A" onclick="switchTab('A')"><div class="wday-name">TER</div><div class="wday-icon">💪</div><div class="wday-label">PUSH</div></div>
+    <div class="wday active-B" onclick="switchTab('B')"><div class="wday-name">QUA</div><div class="wday-icon">🏋️</div><div class="wday-label">PULL</div></div>
+    <div class="wday karate"><div class="wday-name">QUI</div><div class="wday-icon">🥋</div><div class="wday-label">Karatê</div></div>
+    <div class="wday active-C" onclick="switchTab('C')"><div class="wday-name">SEX</div><div class="wday-icon">🦵</div><div class="wday-label">LEGS</div></div>
+    <div class="wday active-D" onclick="switchTab('D')"><div class="wday-name">SÁB</div><div class="wday-icon">⚡</div><div class="wday-label">FULL</div></div>
+    <div class="wday rest"><div class="wday-name">DOM</div><div class="wday-icon">😴</div><div class="wday-label">Descanso</div></div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-wrapper">
+  <div class="tabs">
+    <div class="tab active" data-t="A" onclick="switchTab('A')"><span class="tab-dot"></span>TERÇA — PUSH</div>
+    <div class="tab" data-t="B" onclick="switchTab('B')"><span class="tab-dot"></span>QUARTA — PULL</div>
+    <div class="tab" data-t="C" onclick="switchTab('C')"><span class="tab-dot"></span>SEXTA — LEGS</div>
+    <div class="tab" data-t="D" onclick="switchTab('D')"><span class="tab-dot"></span>SÁBADO — FULL</div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ======== TERÇA — PUSH ======== -->
+<div class="panel active" id="panel-A">
+  <div class="treino-header">
+    <div class="header-top">
+      <div>
+        <div class="treino-tag tag-A">🔴 TERÇA-FEIRA — TREINO A</div>
+        <div class="treino-title" style="color:var(--A)">PUSH<br><span style="font-size:55%">PEITO · OMBRO · TRÍCEPS</span></div>
+        <div class="treino-pills">
+          <span class="tpill">⏱ 65–75 min</span>
+          <span class="tpill">🔁 11 exercícios</span>
+          <span class="tpill">💪 Empurrar = definição frontal</span>
+        </div>
+      </div>
+      <div class="header-stats">
+        <div class="hstat"><div class="hstat-val" style="color:var(--A)">11</div><div class="hstat-label">Exercícios</div></div>
+        <div class="hstat"><div class="hstat-val" style="color:var(--A)">38</div><div class="hstat-label">Séries</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="science-box">
+    <b>🧬 Por que Push/Pull/Legs funciona pra você?</b><br>
+    Mesomorfos respondem muito bem a volume moderado-alto com frequência. Separar "empurrar" de "puxar" permite mais sets por músculo sem sobrecarga — ideal pra ganhar volume E manter a definição. Com karatê 2x/semana você já tem condicionamento extra, o que acelera a queima de gordura.
+  </div>
+
+  <div class="warmup">
+    <strong>⚡ Aquecimento — 5 min</strong>
+    2×15 crucifixo leve + rotação de ombro com elástico. <b>Nunca pule</b> — ombro é a articulação que mais lesiona na academia.
+  </div>
+
+  <!-- PEITO -->
+  <div class="ex-group">
+    <div class="group-header"><div class="gbar gbar-A"></div><div class="glabel">Peito — Força e Massa</div></div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">01</div>
+        <div class="ex-info">
+          <div class="ex-name">Supino reto com barra</div>
+          <div class="ex-sub">Peito inteiro · Exercício base</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--A)">4 × 8</div>
+          <div class="ex-rest">⏸ 90s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">O exercício mais importante do dia. <b>Escápulas retraídas e deprimidas</b> (ombro para baixo e trás), arco lombar leve. Desça controlado em 2s, suba explodindo. Nas últimas 2 séries use um peso que te force ao limite nas 8 reps.</div>
+        <div><span class="tip-cue">Escápulas retraídas</span><span class="tip-cue">Barra sobre o esterno</span><span class="tip-cue">Pés no chão</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">3</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">4</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">02</div>
+        <div class="ex-info">
+          <div class="ex-name">Supino inclinado com halteres</div>
+          <div class="ex-sub">Peito superior · Cria o "shelf" clavicular</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--A)">4 × 10</div>
+          <div class="ex-rest">⏸ 75s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">Banco a <b>30–35°</b> (não mais que isso, senão vira ombro). Halteres descem até o nível do peito em arco, sobem se encontrando no topo. Esse exercício constrói a parte de cima do peito que dá aquela aparência "cheia" mesmo sem camisa.</div>
+        <div><span class="tip-cue">30–35° no banco</span><span class="tip-cue">Arco na descida</span><span class="tip-cue">Não bate os halteres</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">3</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">4</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">03</div>
+        <div class="ex-info">
+          <div class="ex-name">Crossover na polia (alto para baixo)</div>
+          <div class="ex-sub">Peito inferior · Definição e separação</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--A)">3 × 15</div>
+          <div class="ex-rest">⏸ 45s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">Cabos na posição alta. Puxe cruzando as mãos na frente do umbigo. <b>Segure 1 segundo</b> na contração máxima. Peso moderado — foco total na qualidade. Cria aquela linha de separação no peito inferior.</div>
+        <div><span class="tip-cue">Segura 1s no pico</span><span class="tip-cue">Peso leve-moderado</span><span class="tip-cue">Tronco levemente inclinado</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">3</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">04</div>
+        <div class="ex-info">
+          <div class="ex-name">Crucifixo com halteres (banco reto)</div>
+          <div class="ex-sub">Peito · Amplitude e alongamento</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--A)">3 × 12</div>
+          <div class="ex-rest">⏸ 60s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">Cotovelo com leve flexão (nunca totalmente reto). <b>Desce sentindo o alongamento</b> no peito — essa é a parte que constrói tamanho. Sobe como se fosse abraçar alguém. Peso mais leve que o supino, foco no músculo.</div>
+        <div><span class="tip-cue">Cotovelo levemente dobrado</span><span class="tip-cue">Sente o alongamento</span><span class="tip-cue">Não usa peso pesado</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">3</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OMBRO -->
+  <div class="ex-group">
+    <div class="group-header"><div class="gbar gbar-A"></div><div class="glabel">Ombro — Largura e Tridimensionalidade</div></div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">05</div>
+        <div class="ex-info">
+          <div class="ex-name">Desenvolvimento Arnold</div>
+          <div class="ex-sub">Deltoide completo · 3 cabeças simultaneamente</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--A)">4 × 10</div>
+          <div class="ex-rest">⏸ 75s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">O favorito de Arnold Schwarzenegger. Começa com halteres na frente, palmas para você. Ao subir, <b>rotaciona o punho</b> para fora até terminar com palmas pra frente no topo. Ativa os 3 feixes do deltoide em um único movimento.</div>
+        <div><span class="tip-cue">Rotaciona o punho ao subir</span><span class="tip-cue">Amplitude completa</span><span class="tip-cue">Não trava no topo</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">3</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">4</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">06</div>
+        <div class="ex-info">
+          <div class="ex-name">Elevação lateral com halteres</div>
+          <div class="ex-sub">Deltoide médio · O exercício que mais alarga</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--A)">5 × 15</div>
+          <div class="ex-rest">⏸ 45s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text"><b>5 séries porque esse é o exercício mais importante pro ombro estético.</b> Peso LEVE — a maioria usa peso demais e ativa o trapézio. Cotovelo levemente dobrado, sobe até a altura do ombro, desce em 3 segundos. O "pingo de água" no cotovelo: imagine que tem um copo de água pousado nele.</div>
+        <div><span class="tip-cue">Peso leve mesmo</span><span class="tip-cue">Descida em 3 segundos</span><span class="tip-cue">Cotovelo ligeiramente à frente</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">3</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">4</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">5</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">07</div>
+        <div class="ex-info">
+          <div class="ex-name">Face pull na polia</div>
+          <div class="ex-sub">Deltoide posterior · Saúde do ombro</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--A)">3 × 20</div>
+          <div class="ex-rest">⏸ 45s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">Cabo na altura do rosto, corda ou pegada neutra. Puxe em direção ao rosto, cotovelos para fora e para cima. <b>Esse exercício protege seu ombro de lesão</b> e constrói o deltoide posterior (o que dá aparência 3D ao ombro visto de lado).</div>
+        <div><span class="tip-cue">Cotovelos para fora</span><span class="tip-cue">Puxe até o rosto</span><span class="tip-cue">Nunca pule este</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">3</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRÍCEPS -->
+  <div class="ex-group">
+    <div class="group-header"><div class="gbar gbar-A"></div><div class="glabel">Tríceps — Volume e Separação</div></div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">08</div>
+        <div class="ex-info">
+          <div class="ex-name">Tríceps testa com barra W</div>
+          <div class="ex-sub">Cabeça longa · Maior porção do tríceps</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--A)">4 × 10</div>
+          <div class="ex-rest">⏸ 60s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">Deitado no banco, barra desce em direção à testa ou levemente atrás da cabeça. <b>Cotovelos apontam para o teto</b>, não para os lados. Esse exercício trabalha a cabeça longa do tríceps — a maior parte, que dá o tamanho do braço.</div>
+        <div><span class="tip-cue">Cotovelos fixos</span><span class="tip-cue">Desce atrás da cabeça</span><span class="tip-cue">Sobe rápido</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">3</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">4</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">09</div>
+        <div class="ex-info">
+          <div class="ex-name">Tríceps polia com corda</div>
+          <div class="ex-sub">3 cabeças · Separação e definição</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--A)">4 × 12</div>
+          <div class="ex-rest">⏸ 45s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">Cotovelos colados ao corpo. Empurra a corda para baixo e <b>abre as mãos para fora no final</b> — isso maximiza a contração. Desce controlado, 2 segundos subindo. Não balanças o tronco.</div>
+        <div><span class="tip-cue">Abre as mãos no fim</span><span class="tip-cue">Cotovelos fixos</span><span class="tip-cue">Não balance</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">3</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">4</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">10</div>
+        <div class="ex-info">
+          <div class="ex-name">Tríceps unilateral polia (overhead)</div>
+          <div class="ex-sub">Cabeça longa · Alongamento máximo</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--A)">3 × 12</div>
+          <div class="ex-rest">⏸ 45s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">Cabo atrás da cabeça, braço apontado para cima. <b>Estende o braço para cima</b>, cotovelo aponta para o teto. Trabalha a cabeça longa em posição alongada — muito eficiente pra hipertrofia. Faz um braço por vez.</div>
+        <div><span class="tip-cue">Braço aponta para cima</span><span class="tip-cue">Um braço por vez</span><span class="tip-cue">Amplitude total</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">3</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">11</div>
+        <div class="ex-info">
+          <div class="ex-name">Mergulho entre bancos (com peso)</div>
+          <div class="ex-sub">Tríceps + peito inferior · Finalizador</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--A)">3 × máx</div>
+          <div class="ex-rest">⏸ 60s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">Mãos no banco atrás, pernas estendidas. Desce até 90° no cotovelo e sobe. <b>Coloca um anilha no colo</b> para progredir. Excelente finalizador — o tríceps já vai estar cansado e vai falhar logo, isso é ótimo para hipertrofia.</div>
+        <div><span class="tip-cue">Adiciona peso no colo</span><span class="tip-cue">90° no cotovelo</span><span class="tip-cue">Falha muscular = bom</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'A')">3</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="total-row">
+    <div class="total-item"><div class="total-val" style="color:var(--A)">11</div><div class="total-label">Exercícios</div></div>
+    <div class="total-item"><div class="total-val" style="color:var(--A)">38</div><div class="total-label">Séries</div></div>
+    <div class="total-item"><div class="total-val" style="color:var(--A)">70min</div><div class="total-label">Estimado</div></div>
+    <div class="total-item"><div class="total-val" style="color:var(--A)">🔴</div><div class="total-label">Terça-feira</div></div>
+  </div>
+</div>
+
+<!-- ======== QUARTA — PULL ======== -->
+<div class="panel" id="panel-B">
+  <div class="treino-header">
+    <div class="header-top">
+      <div>
+        <div class="treino-tag tag-B">🔵 QUARTA-FEIRA — TREINO B</div>
+        <div class="treino-title" style="color:var(--B)">PULL<br><span style="font-size:55%">COSTAS · BÍCEPS · POSTERIOR OMBRO</span></div>
+        <div class="treino-pills">
+          <span class="tpill">⏱ 65–75 min</span>
+          <span class="tpill">🔁 11 exercícios</span>
+          <span class="tpill">💪 Costas = V invertido + espessura</span>
+        </div>
+      </div>
+      <div class="header-stats">
+        <div class="hstat"><div class="hstat-val" style="color:var(--B)">11</div><div class="hstat-label">Exercícios</div></div>
+        <div class="hstat"><div class="hstat-val" style="color:var(--B)">38</div><div class="hstat-label">Séries</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="warmup">
+    <strong>⚡ Aquecimento — 5 min</strong>
+    2×15 pulldown leve + rotação de escápula. Ativa o dorsal antes de colocar carga pesada.
+  </div>
+
+  <!-- COSTAS LARGURA -->
+  <div class="ex-group">
+    <div class="group-header"><div class="gbar gbar-B"></div><div class="glabel">Costas — Largura (V Invertido)</div></div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">01</div>
+        <div class="ex-info">
+          <div class="ex-name">Barra fixa pegada larga (ou assistida)</div>
+          <div class="ex-sub">Dorsal · O melhor exercício pra alargura</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--B)">4 × máx</div>
+          <div class="ex-rest">⏸ 90s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">Se não conseguir 6 reps, use a <b>máquina assistida</b>. Pegada pronada larga. Sobe até o queixo passar a barra, desce completamente estendendo os braços. <b>Não bale o corpo.</b> Com 1.82m, barra fixa vai construir um dorsal enorme.</div>
+        <div><span class="tip-cue">Extensão total embaixo</span><span class="tip-cue">Cotovelos para baixo</span><span class="tip-cue">Sem balanço</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">3</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">4</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">02</div>
+        <div class="ex-info">
+          <div class="ex-name">Pulldown pegada larga pronada</div>
+          <div class="ex-sub">Dorsal · Largura + volume</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--B)">4 × 12</div>
+          <div class="ex-rest">⏸ 75s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">Puxe até o queixo, cotovelos apontam para baixo e para fora. <b>Incline levemente o tronco para trás</b> ao puxar — isso aumenta o range de movimento do dorsal. Desce controlado sentindo o alongamento.</div>
+        <div><span class="tip-cue">Inclinação leve do tronco</span><span class="tip-cue">Cotovelos para fora</span><span class="tip-cue">Sente o alongamento</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">3</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">4</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">03</div>
+        <div class="ex-info">
+          <div class="ex-name">Pulldown supinado (pegada fechada)</div>
+          <div class="ex-sub">Dorsal inferior · Define a "cintura" do dorsal</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--B)">3 × 12</div>
+          <div class="ex-rest">⏸ 60s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">Pegada supinada (palmas para você), mais fechada. Puxe até o peito. O bíceps ajuda mais nesse movimento, mas o dorsal inferior é bem ativado — essa é a parte que cria o "V" mais pronunciado.</div>
+        <div><span class="tip-cue">Pegada supinada</span><span class="tip-cue">Puxe até o peito</span><span class="tip-cue">Tronco reto</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">3</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COSTAS ESPESSURA -->
+  <div class="ex-group">
+    <div class="group-header"><div class="gbar gbar-B"></div><div class="glabel">Costas — Espessura (Remadas)</div></div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">04</div>
+        <div class="ex-info">
+          <div class="ex-name">Remada curvada com barra</div>
+          <div class="ex-sub">Dorsal médio · Trapézio · Romboides</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--B)">4 × 8</div>
+          <div class="ex-rest">⏸ 90s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">Tronco a 45°, costas retas. Puxe a barra até o umbigo. <b>Cotovelos colados ao corpo para mais dorsal</b>, abertos para mais trapézio. Esse é o exercício que coloca espessura nas costas — faça pesado.</div>
+        <div><span class="tip-cue">Costas retas sempre</span><span class="tip-cue">Puxe até o umbigo</span><span class="tip-cue">Cotovelos colados = dorsal</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">3</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">4</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">05</div>
+        <div class="ex-info">
+          <div class="ex-name">Remada unilateral com haltere</div>
+          <div class="ex-sub">Dorsal · Contração unilateral máxima</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--B)">4 × 10</div>
+          <div class="ex-rest">⏸ 60s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">Joelho e mão no banco. Puxe o haltere até o quadril, <b>cotovelo sobe bem alto</b>. Sente CADA rep no dorsal — se sentir no bíceps, está usando o braço demais. Imagine que seu braço é apenas um gancho, quem puxa é o dorsal.</div>
+        <div><span class="tip-cue">Cotovelo sobe alto</span><span class="tip-cue">Dorsal puxa, braço é gancho</span><span class="tip-cue">Amplitude total</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">3</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">4</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">06</div>
+        <div class="ex-info">
+          <div class="ex-name">Remada cavalinho / máquina</div>
+          <div class="ex-sub">Costas médias · Finalizador com pump</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--B)">3 × 15</div>
+          <div class="ex-rest">⏸ 45s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">Peso moderado-leve. <b>Segura 1 segundo no pico</b> da contração. O objetivo aqui é encher as costas de sangue no final do treino — esse pump acelera a recuperação e o crescimento muscular.</div>
+        <div><span class="tip-cue">Segura 1s no pico</span><span class="tip-cue">Foco no pump</span><span class="tip-cue">Não usa peso pesado</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">3</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BÍCEPS -->
+  <div class="ex-group">
+    <div class="group-header"><div class="gbar gbar-B"></div><div class="glabel">Bíceps — Pico e Volume</div></div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">07</div>
+        <div class="ex-info">
+          <div class="ex-name">Rosca direta barra W (EZ)</div>
+          <div class="ex-sub">Bíceps · Base de massa</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--B)">4 × 8</div>
+          <div class="ex-rest">⏸ 75s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">Cotovelos fixos, <b>desce em 3 segundos</b> (excêntrico lento = mais hipertrofia). Não balance o tronco para ajudar — se precisar balançar, o peso está pesado demais. Sobe até o pico e contrai forte.</div>
+        <div><span class="tip-cue">3s na descida</span><span class="tip-cue">Cotovelos fixos</span><span class="tip-cue">Sem balanço</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">3</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">4</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">08</div>
+        <div class="ex-info">
+          <div class="ex-name">Rosca martelo com halteres</div>
+          <div class="ex-sub">Braquial · Engrossa o braço</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--B)">3 × 12</div>
+          <div class="ex-rest">⏸ 60s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">Pegada neutra (polegar para cima). Esse exercício trabalha o <b>braquial</b>, que fica embaixo do bíceps e quando cresce "empurra" o bíceps para cima, criando mais pico. Alternado ou simultâneo.</div>
+        <div><span class="tip-cue">Pegada neutra</span><span class="tip-cue">Trabalha o braquial</span><span class="tip-cue">Não bale</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">3</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">09</div>
+        <div class="ex-info">
+          <div class="ex-name">Rosca Scott (banco Scott ou polia baixa)</div>
+          <div class="ex-sub">Bíceps inferior · Pico visual</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--B)">3 × 12</div>
+          <div class="ex-rest">⏸ 45s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">Banco Scott isolado o cotovelo. <b>Não tem como balançar</b> — o músculo faz o trabalho sozinho. Trabalha especialmente a cabeça curta do bíceps, que cria aquela aparência cheia e redonda. Desce com cuidado — perigoso para o cotovelo ir rápido.</div>
+        <div><span class="tip-cue">Cotovelo no apoio</span><span class="tip-cue">Desce devagar</span><span class="tip-cue">Máximo isolamento</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">3</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">10</div>
+        <div class="ex-info">
+          <div class="ex-name">Rosca concentrada</div>
+          <div class="ex-sub">Pico do bíceps · Contração máxima</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--B)">3 × 12</div>
+          <div class="ex-rest">⏸ 45s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">Cotovelo apoiado na coxa interna. Sobe e <b>segura 2 segundos no topo</b>, espremendo o bíceps. Esse é o exercício que cria o "pico" — a parte arredondada do bíceps que aparece quando você dobra o braço.</div>
+        <div><span class="tip-cue">Segura 2s no topo</span><span class="tip-cue">Espreme o bíceps</span><span class="tip-cue">Um braço por vez</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">3</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">11</div>
+        <div class="ex-info">
+          <div class="ex-name">Rosca 21 com barra</div>
+          <div class="ex-sub">Bíceps · Finalizador brutal</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--B)">3 × 21</div>
+          <div class="ex-rest">⏸ 60s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text"><b>7 reps no terço inferior + 7 reps no terço superior + 7 reps completas = 21 reps.</b> Peso leve — você vai sentir queimar muito. Isso gera um pump absurdo e um estímulo diferente dos exercícios anteriores. Perfeito para acabar com o bíceps.</div>
+        <div><span class="tip-cue">7+7+7</span><span class="tip-cue">Peso bem leve</span><span class="tip-cue">Suporta a queimação</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'B')">3</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="total-row">
+    <div class="total-item"><div class="total-val" style="color:var(--B)">11</div><div class="total-label">Exercícios</div></div>
+    <div class="total-item"><div class="total-val" style="color:var(--B)">38</div><div class="total-label">Séries</div></div>
+    <div class="total-item"><div class="total-val" style="color:var(--B)">70min</div><div class="total-label">Estimado</div></div>
+    <div class="total-item"><div class="total-val" style="color:var(--B)">🔵</div><div class="total-label">Quarta-feira</div></div>
+  </div>
+</div>
+
+<!-- ======== SEXTA — LEGS ======== -->
+<div class="panel" id="panel-C">
+  <div class="treino-header">
+    <div class="header-top">
+      <div>
+        <div class="treino-tag tag-C">🟡 SEXTA-FEIRA — TREINO C</div>
+        <div class="treino-title" style="color:var(--C)">LEGS<br><span style="font-size:55%">QUAD · POSTERIOR · GLÚTEO · PANTURRILHA</span></div>
+        <div class="treino-pills">
+          <span class="tpill">⏱ 70–80 min</span>
+          <span class="tpill">🔁 10 exercícios</span>
+          <span class="tpill">🦵 Perna = hormônio + simetria</span>
+        </div>
+      </div>
+      <div class="header-stats">
+        <div class="hstat"><div class="hstat-val" style="color:var(--C)">10</div><div class="hstat-label">Exercícios</div></div>
+        <div class="hstat"><div class="hstat-val" style="color:var(--C)">38</div><div class="hstat-label">Séries</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="science-box">
+    <b>🧬 Por que não pular perna?</b><br>
+    Treinar perna libera mais testosterona e hormônio de crescimento do que qualquer outro treino — isso acelera o crescimento de TODO o corpo, incluindo braço e peito. Com 1.82m você precisa de pernas proporcionais para o corpo grego fazer sentido.
+  </div>
+
+  <div class="warmup">
+    <strong>⚡ Aquecimento — 8 min</strong>
+    5 min bicicleta ergométrica + 2×20 agachamento com peso do corpo + alongamento de quadril. Perna fria = lesão garantida.
+  </div>
+
+  <div class="ex-group">
+    <div class="group-header"><div class="gbar gbar-C"></div><div class="glabel">Quadríceps — Força e Massa</div></div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">01</div>
+        <div class="ex-info">
+          <div class="ex-name">Agachamento livre com barra</div>
+          <div class="ex-sub">Quad + glúteo + posterior · O rei</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--C)">5 × 8</div>
+          <div class="ex-rest">⏸ 120s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">Pés na largura dos ombros, levemente abertos. <b>Desce até a coxa paralela ao chão</b> — não mais raso. Joelhos seguem a direção dos pés. Olha para frente. 5 séries pesadas porque é o exercício mais importante da perna. Doerá no dia seguinte — isso é bom.</div>
+        <div><span class="tip-cue">Coxa paralela ao chão</span><span class="tip-cue">Joelhos seguem os pés</span><span class="tip-cue">Olhar à frente</span><span class="tip-cue">Core contraído</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">3</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">4</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">5</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">02</div>
+        <div class="ex-info">
+          <div class="ex-name">Leg press 45°</div>
+          <div class="ex-sub">Quad + glúteo · Volume alto</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--C)">4 × 12</div>
+          <div class="ex-rest">⏸ 90s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">Pés no meio da plataforma. <b>Não deixa o lombar sair do apoio</b> na descida. Teste diferentes posições de pé: pés altos = mais glúteo, pés baixos = mais quadríceps, pés abertos = mais interno da coxa.</div>
+        <div><span class="tip-cue">Lombar no apoio</span><span class="tip-cue">90° no joelho</span><span class="tip-cue">Varia posição dos pés</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">3</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">4</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">03</div>
+        <div class="ex-info">
+          <div class="ex-name">Cadeira extensora</div>
+          <div class="ex-sub">Quadríceps · Isolamento e definição</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--C)">4 × 15</div>
+          <div class="ex-rest">⏸ 45s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">Trava o joelho no topo e <b>segura 1 segundo</b>. Desce em 3 segundos. Cria a definição "estriada" no quadríceps. Cuidado com o peso — joelho doendo = pare imediatamente.</div>
+        <div><span class="tip-cue">Segura 1s no topo</span><span class="tip-cue">Desce em 3s</span><span class="tip-cue">Respeita o joelho</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">3</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">4</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-group">
+    <div class="group-header"><div class="gbar gbar-C"></div><div class="glabel">Posterior + Glúteo</div></div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">04</div>
+        <div class="ex-info">
+          <div class="ex-name">Stiff com barra</div>
+          <div class="ex-sub">Isquiotibiais + glúteo · Comprimento do músculo</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--C)">4 × 10</div>
+          <div class="ex-rest">⏸ 75s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">Pernas quase retas (leve flexão). Incline o tronco, <b>empurrando o quadril para trás</b> — não dobrar a coluna. Sente o alongamento no posterior. Sobe contraindo o glúteo. <b>Costas retas é obrigatório</b> — coluna arredondada pode lesionar.</div>
+        <div><span class="tip-cue">Quadril para trás</span><span class="tip-cue">Costas retas</span><span class="tip-cue">Sente o posterior</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">3</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">4</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">05</div>
+        <div class="ex-info">
+          <div class="ex-name">Mesa flexora</div>
+          <div class="ex-sub">Bíceps femoral · Isquiotibiais</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--C)">4 × 12</div>
+          <div class="ex-rest">⏸ 60s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">Deitado de bruços. Sobe rápido, <b>desce em 3 segundos</b> (excêntrico lento). Não levanta o quadril da mesa. Esse é um dos exercícios mais importantes para estética da perna — o posterior treinado dá forma ao corpo visto de lado.</div>
+        <div><span class="tip-cue">Desce em 3s</span><span class="tip-cue">Quadril na mesa</span><span class="tip-cue">Amplitude total</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">3</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">4</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">06</div>
+        <div class="ex-info">
+          <div class="ex-name">Avanço caminhando com halteres</div>
+          <div class="ex-sub">Glúteo + quad + equilíbrio</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--C)">3 × 12</div>
+          <div class="ex-rest">⏸ 60s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">Passo largo. Joelho traseiro quase toca o chão. <b>Sobe empurrando o calcanhar da frente</b> — isso ativa mais o glúteo. Joelho da frente não ultrapassa a ponta do pé. Caminhando é mais difícil que estático — exige mais equilíbrio.</div>
+        <div><span class="tip-cue">Calcanhar empurra o chão</span><span class="tip-cue">Joelho traseiro quase toca</span><span class="tip-cue">Tronco ereto</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">3</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-group">
+    <div class="group-header"><div class="gbar gbar-C"></div><div class="glabel">Panturrilha — Volume Alto</div></div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">07</div>
+        <div class="ex-info">
+          <div class="ex-name">Panturrilha em pé na máquina</div>
+          <div class="ex-sub">Gastrocnêmio · Volume e forma</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--C)">5 × 20</div>
+          <div class="ex-rest">⏸ 45s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text"><b>Amplitude TOTAL</b>: calcanhar cai abaixo do degrau no fundo, sobe até a ponta máxima. Segura 1 segundo no topo. 5 séries porque panturrilha precisa de volume alto para crescer — é o músculo mais resistente do corpo.</div>
+        <div><span class="tip-cue">Amplitude total</span><span class="tip-cue">Segura 1s no topo</span><span class="tip-cue">5 séries mínimo</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">3</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">4</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">5</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">08</div>
+        <div class="ex-info">
+          <div class="ex-name">Panturrilha sentada (sóleo)</div>
+          <div class="ex-sub">Sóleo · Panturrilha interna e baixa</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--C)">4 × 20</div>
+          <div class="ex-rest">⏸ 45s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">Joelhos dobrados a 90°. O músculo <b>sóleo</b> (camada mais funda) só é ativado com o joelho dobrado. Quando cresce, empurra o gastrocnêmio para fora — isso faz a panturrilha parecer maior e mais desenvolvida.</div>
+        <div><span class="tip-cue">Joelho a 90°</span><span class="tip-cue">Ativa o sóleo</span><span class="tip-cue">Mesma técnica de amplitude</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">3</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'C')">4</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="total-row">
+    <div class="total-item"><div class="total-val" style="color:var(--C)">8</div><div class="total-label">Exercícios</div></div>
+    <div class="total-item"><div class="total-val" style="color:var(--C)">37</div><div class="total-label">Séries</div></div>
+    <div class="total-item"><div class="total-val" style="color:var(--C)">75min</div><div class="total-label">Estimado</div></div>
+    <div class="total-item"><div class="total-val" style="color:var(--C)">🟡</div><div class="total-label">Sexta-feira</div></div>
+  </div>
+</div>
+
+<!-- ======== SÁBADO — FULL ======== -->
+<div class="panel" id="panel-D">
+  <div class="treino-header">
+    <div class="header-top">
+      <div>
+        <div class="treino-tag tag-D">🟣 SÁBADO — TREINO D</div>
+        <div class="treino-title" style="color:var(--D)">FULL BODY<br><span style="font-size:55%">FORÇA + DEFINIÇÃO + ABDÔMEN</span></div>
+        <div class="treino-pills">
+          <span class="tpill">⏱ 60–70 min</span>
+          <span class="tpill">🔁 10 exercícios</span>
+          <span class="tpill">⚡ Frequência extra = mais resultado</span>
+        </div>
+      </div>
+      <div class="header-stats">
+        <div class="hstat"><div class="hstat-val" style="color:var(--D)">10</div><div class="hstat-label">Exercícios</div></div>
+        <div class="hstat"><div class="hstat-val" style="color:var(--D)">30</div><div class="hstat-label">Séries</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="science-box">
+    <b>🧬 Por que Full Body no sábado?</b><br>
+    Treinar um músculo 2x/semana cresce 30–40% mais rápido do que 1x/semana. O Full Body leve do sábado dá uma segunda frequência em cada grupo muscular — com volume reduzido para não sobrecarregar. Esse é o segredo dos físicos estéticos.
+  </div>
+
+  <div class="warmup">
+    <strong>⚡ Aquecimento — 5 min</strong>
+    Corrida leve 3 min + 10 burpees. O Full Body é mais dinâmico — aquece o corpo inteiro primeiro.
+  </div>
+
+  <div class="ex-group">
+    <div class="group-header"><div class="gbar gbar-D"></div><div class="glabel">Compostos — Base do Full Body</div></div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">01</div>
+        <div class="ex-info">
+          <div class="ex-name">Levantamento terra</div>
+          <div class="ex-sub">Costas + glúteo + posterior + core · O melhor composto</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--D)">4 × 6</div>
+          <div class="ex-rest">⏸ 120s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">O exercício que mais libera testosterona. Barra no chão, pés na largura do quadril. <b>Costas retas, quadril desce</b>, empurra o chão com os pés ao subir. Segura a barra com pegada mista se necessário. Não arredonde a lombar jamais.</div>
+        <div><span class="tip-cue">Costas retas</span><span class="tip-cue">Quadril desce</span><span class="tip-cue">Empurra o chão</span><span class="tip-cue">Pegada firme</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">3</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">4</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">02</div>
+        <div class="ex-info">
+          <div class="ex-name">Supino com halteres</div>
+          <div class="ex-sub">Peito · Segunda frequência semanal</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--D)">3 × 12</div>
+          <div class="ex-rest">⏸ 60s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">Volume reduzido em relação à terça. O objetivo aqui é <b>segunda frequência</b> — estimular o peito novamente com menos volume para potencializar o crescimento. Foca na conexão mente-músculo.</div>
+        <div><span class="tip-cue">Segunda frequência</span><span class="tip-cue">Foco na contração</span><span class="tip-cue">Não force demais</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">3</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">03</div>
+        <div class="ex-info">
+          <div class="ex-name">Remada curvada com halteres</div>
+          <div class="ex-sub">Costas · Segunda frequência semanal</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--D)">3 × 12</div>
+          <div class="ex-rest">⏸ 60s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">Halteres ao invés de barra — <b>permite mais rotação do punho</b>, ativando mais o dorsal. Volume leve, concentra na contração de cada rep. Complementa o Pull da quarta.</div>
+        <div><span class="tip-cue">Rotação do punho</span><span class="tip-cue">Costas retas</span><span class="tip-cue">Contração máxima</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">3</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">04</div>
+        <div class="ex-info">
+          <div class="ex-name">Desenvolvimento militar barra</div>
+          <div class="ex-sub">Ombro · Força overhead</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--D)">3 × 10</div>
+          <div class="ex-rest">⏸ 75s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">Em pé, barra na frente. Empurra acima da cabeça sem arquear o lombar. <b>Core bem contraído</b> durante todo o movimento. É mais difícil que o Arnold com halteres — ativa mais estabilizadores do ombro.</div>
+        <div><span class="tip-cue">Em pé</span><span class="tip-cue">Core contraído</span><span class="tip-cue">Não arqueia o lombar</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">3</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">05</div>
+        <div class="ex-info">
+          <div class="ex-name">Agachamento goblet com haltere</div>
+          <div class="ex-sub">Quad + core · Segunda frequência de perna</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--D)">3 × 15</div>
+          <div class="ex-rest">⏸ 60s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">Segura haltere na frente do peito com as duas mãos. <b>Cotovelos ficam dentro dos joelhos</b> ao descer — isso abre o quadril e permite descer mais fundo. Muito bom para mobilidade e quadríceps. Mais leve que o agachamento livre.</div>
+        <div><span class="tip-cue">Cotovelos dentro dos joelhos</span><span class="tip-cue">Desce fundo</span><span class="tip-cue">Calcanhar no chão</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">3</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-group">
+    <div class="group-header"><div class="gbar gbar-D"></div><div class="glabel">Braços — Segunda Frequência Explosiva</div></div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">06</div>
+        <div class="ex-info">
+          <div class="ex-name">Superset: Rosca + Tríceps polia</div>
+          <div class="ex-sub">Bíceps + Tríceps · Pump máximo nos braços</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--D)">4 × 12</div>
+          <div class="ex-rest">⏸ 30s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text"><b>SUPERSET:</b> faz 12 reps de rosca com halteres → vai direto para 12 reps de tríceps na polia → descansa 30s. Repete 4 vezes. Isso cria um <b>pump insano nos braços</b> — os músculos antagônicos se alternam, permitindo descanso ativo. Favorito de fisiculturistas para braços.</div>
+        <div><span class="tip-cue">Sem descanso entre rosca e tríceps</span><span class="tip-cue">30s entre supersets</span><span class="tip-cue">Pump é o objetivo</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">3</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">4</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-group">
+    <div class="group-header"><div class="gbar gbar-D"></div><div class="glabel">Abdômen — Todos os Dias Vale, Mas Sábado É Obrigatório</div></div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">07</div>
+        <div class="ex-info">
+          <div class="ex-name">Abdominal supra (crunch)</div>
+          <div class="ex-sub">Reto abdominal superior</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--D)">4 × 25</div>
+          <div class="ex-rest">⏸ 30s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">Mãos atrás da cabeça, <b>não puxa o pescoço</b>. Sobe contraindo o abdômen, não o pescoço. Desce controlado. Para progredir: coloca um anilha no peito ou usa o aparelho de abdominal.</div>
+        <div><span class="tip-cue">Não puxa o pescoço</span><span class="tip-cue">Contração abdominal</span><span class="tip-cue">Adiciona peso para progredir</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">3</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">4</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">08</div>
+        <div class="ex-info">
+          <div class="ex-name">Elevação de pernas (suspenso ou deitado)</div>
+          <div class="ex-sub">Reto abdominal inferior</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--D)">4 × 20</div>
+          <div class="ex-rest">⏸ 30s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">Suspenso na barra ou deitado no banco. Sobe as pernas até 90°, desce sem encostar no chão. <b>Lombar colada no banco</b> o tempo todo. A parte mais difícil de definir é o abdômen inferior — esse exercício ataca diretamente.</div>
+        <div><span class="tip-cue">Lombar colada</span><span class="tip-cue">Não encosta no chão</span><span class="tip-cue">Controla a descida</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">3</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">4</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">09</div>
+        <div class="ex-info">
+          <div class="ex-name">Prancha (isométrico)</div>
+          <div class="ex-sub">Core completo · Estabilidade</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--D)">3 × 60s</div>
+          <div class="ex-rest">⏸ 30s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text"><b>Corpo reto como uma tábua</b> do calcanhar ao ombro. Quadril não sobe nem desce. Respira normalmente. Quando ficar fácil: 90s, depois 2min, depois com um pé levantado. O core forte melhora TODOS os outros exercícios.</div>
+        <div><span class="tip-cue">Corpo reto</span><span class="tip-cue">Quadril neutro</span><span class="tip-cue">Respira normalmente</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">3</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" onclick="toggleEx(this)">
+      <div class="ex-main">
+        <div class="ex-num">10</div>
+        <div class="ex-info">
+          <div class="ex-name">Oblíquos (russian twist com peso)</div>
+          <div class="ex-sub">Oblíquos · Cintura definida</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-sets" style="color:var(--D)">3 × 30</div>
+          <div class="ex-rest">⏸ 30s</div>
+        </div>
+      </div>
+      <div class="ex-tip">
+        <div class="tip-text">Sentado com pés levantados, segura uma anilha ou haltere. Gira o tronco de lado a lado. <b>30 = 15 de cada lado.</b> Os oblíquos são o que dá a "cintura" ao corpo masculino — aquela aparência de tronco invertido em forma de V.</div>
+        <div><span class="tip-cue">Pés levantados</span><span class="tip-cue">Gira o tronco</span><span class="tip-cue">30 = 15 cada lado</span></div>
+        <div class="tracker"><span class="tlabel">Séries</span>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">1</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">2</div>
+          <div class="sbtn" onclick="toggleSet(event,this,'D')">3</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="total-row">
+    <div class="total-item"><div class="total-val" style="color:var(--D)">10</div><div class="total-label">Exercícios</div></div>
+    <div class="total-item"><div class="total-val" style="color:var(--D)">30</div><div class="total-label">Séries</div></div>
+    <div class="total-item"><div class="total-val" style="color:var(--D)">65min</div><div class="total-label">Estimado</div></div>
+    <div class="total-item"><div class="total-val" style="color:var(--D)">🟣</div><div class="total-label">Sábado</div></div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<script>
+  function switchTab(t) {
+    document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(el => el.classList.remove('active'));
+    document.querySelector(`.tab[data-t="${t}"]`).classList.add('active');
+    document.getElementById(`panel-${t}`).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function toggleEx(card) {
+    card.classList.toggle('open');
+  }
+
+  function toggleSet(e, btn, color) {
+    e.stopPropagation();
+    btn.classList.toggle(`done-${color}`);
+  }
+</script>
+</body>
+</html>
