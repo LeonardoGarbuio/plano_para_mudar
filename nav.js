@@ -3,9 +3,10 @@
 
 (function () {
   const pages = [
-    { href: "index.html",        label: "Hábitos",   icon: "✅" },
-    { href: "plano_de_treino.html", label: "Treinos",   icon: "💪" },
-    { href: "calculadora_IMC.html",  label: "IMC",       icon: "⚖️" },
+    { href: "index.html",           label: "Hábitos",  icon: "✅" },
+    { href: "plano_de_treino.html", label: "Treinos",  icon: "💪" },
+    { href: "timer.html",           label: "Timer",    icon: "⏱" },
+    { href: "calculadora_IMC.html", label: "IMC",      icon: "⚖️" },
   ];
 
   // descobre qual página está ativa

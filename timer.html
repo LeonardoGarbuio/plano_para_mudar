@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timer — Corpo Grego</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a12;
+    --surface: #11111e;
+    --card: #16162a;
+    --border: #22223a;
+    --accent: #e8ff47;
+    --text: #f0f0f8;
+    --muted: #5a5a7a;
+    --green: #4eff91;
+    --red: #ff4e6a;
+    --blue: #47c8ff;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* NAVBAR PLACEHOLDER */
+  #navbar { position: sticky; top: 0; z-index: 999; }
+
+  .page {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+
+  /* HEADER */
+  .header { text-align: center; margin-bottom: 32px; animation: fadeDown 0.5s ease both; }
+  .header .tag {
+    display: inline-block;
+    background: var(--accent);
+    color: #000;
+    font-weight: 800;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 2px;
+    margin-bottom: 12px;
+  }
+  .header h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px;
+    letter-spacing: 3px;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .header h1 span { color: var(--accent); }
+  .header p { color: var(--muted); font-size: 13px; }
+
+  /* MAIN TIMER CARD */
+  .timer-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px 28px;
+    margin-bottom: 16px;
+    text-align: center;
+    animation: fadeUp 0.4s ease both;
+  }
+
+  /* CIRCLE TIMER */
+  .circle-wrap {
+    position: relative;
+    width: 220px;
+    height: 220px;
+    margin: 0 auto 28px;
+  }
+
+  .circle-svg {
+    position: absolute;
+    top: 0; left: 0;
+    transform: rotate(-90deg);
+  }
+
+  .circle-bg { fill: none; stroke: var(--border); stroke-width: 8; }
+  .circle-progress {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 628;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 0.5s ease, stroke 0.3s;
+  }
+
+  .circle-inner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .timer-display {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 72px;
+    letter-spacing: 2px;
+    line-height: 1;
+    color: var(--accent);
+    transition: color 0.3s;
+  }
+
+  .timer-phase {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 700;
+    margin-top: 4px;
+  }
+
+  /* PHASE INDICATOR */
+  .phase-bar {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+
+  .phase-pill {
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    background: var(--surface);
+    transition: all 0.3s;
+  }
+
+  .phase-pill.active-exercise { background: rgba(232,255,71,0.1); border-color: var(--accent); color: var(--accent); }
+  .phase-pill.active-rest { background: rgba(71,200,255,0.1); border-color: var(--blue); color: var(--blue); }
+
+  /* CONTROLS */
+  .controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .btn {
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 20px;
+  }
+
+  .btn:active { transform: scale(0.96); }
+
+  .btn-play {
+    background: var(--accent);
+    color: #000;
+    padding: 14px 36px;
+    font-size: 15px;
+    border-radius: 12px;
+  }
+
+  .btn-play:hover { background: #d4e83f; }
+
+  .btn-reset {
+    background: var(--surface);
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+
+  .btn-reset:hover { color: var(--text); border-color: var(--muted); }
+
+  .btn-skip {
+    background: var(--surface);
+    color: var(--blue);
+    border: 1px solid rgba(71,200,255,0.3);
+  }
+
+  .btn-skip:hover { background: rgba(71,200,255,0.08); }
+
+  /* SERIES INFO */
+  .series-info {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .sinfo { text-align: center; }
+  .sinfo-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    line-height: 1;
+    margin-bottom: 2px;
+  }
+  .sinfo-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
+
+  /* CONFIG CARD */
+  .config-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 16px;
+    animation: fadeUp 0.4s 0.1s ease both;
+  }
+
+  .config-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    margin-bottom: 18px;
+    color: var(--accent);
+  }
+
+  .config-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    gap: 12px;
+  }
+
+  .config-row:last-child { margin-bottom: 0; }
+
+  .config-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    flex: 1;
+  }
+
+  .config-sub { font-size: 11px; color: var(--muted); font-weight: 400; display: block; margin-top: 1px; }
+
+  .config-right { display: flex; align-items: center; gap: 8px; }
+
+  .num-btn {
+    width: 32px; height: 32px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .num-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .num-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    min-width: 48px;
+    text-align: center;
+    color: var(--accent);
+  }
+
+  /* QUICK PRESETS */
+  .presets-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 16px;
+    animation: fadeUp 0.4s 0.15s ease both;
+  }
+
+  .presets-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    margin-bottom: 14px;
+    color: var(--muted);
+  }
+
+  .presets-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .preset-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  .preset-btn:hover { border-color: var(--accent); background: rgba(232,255,71,0.04); }
+
+  .preset-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .preset-detail {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* NOTIF BANNER */
+  .notif-banner {
+    background: rgba(71,200,255,0.06);
+    border: 1px solid rgba(71,200,255,0.2);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: #aaa;
+    line-height: 1.6;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    animation: fadeUp 0.4s 0.2s ease both;
+  }
+
+  .notif-icon { font-size: 20px; flex-shrink: 0; }
+
+  .notif-banner button {
+    margin-top: 8px;
+    background: rgba(71,200,255,0.15);
+    border: 1px solid rgba(71,200,255,0.3);
+    border-radius: 6px;
+    color: var(--blue);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: all 0.15s;
+  }
+
+  .notif-banner button:hover { background: rgba(71,200,255,0.25); }
+
+  /* ALERT OVERLAY */
+  .alert-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .alert-overlay.show { display: flex; }
+
+  .alert-box {
+    background: var(--card);
+    border: 2px solid var(--accent);
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    max-width: 320px;
+    animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+
+  .alert-icon { font-size: 60px; margin-bottom: 16px; }
+
+  .alert-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .alert-sub { font-size: 14px; color: var(--muted); margin-bottom: 24px; line-height: 1.6; }
+
+  .alert-btn {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 32px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.15s;
+  }
+
+  .alert-btn:hover { background: #d4e83f; }
+
+  @keyframes fadeDown { from { opacity:0; transform:translateY(-16px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+  @keyframes popIn { from { opacity:0; transform:scale(0.8); } to { opacity:1; transform:scale(1); } }
+
+  @media (max-width: 400px) {
+    .timer-display { font-size: 56px; }
+    .circle-wrap { width: 180px; height: 180px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="navbar"></div>
+<script src="nav.js"></script>
+
+<div class="page">
+
+  <div class="header">
+    <div class="tag">⏱ Seu Cronômetro</div>
+    <h1>TIMER DE<br><span>TREINO</span></h1>
+    <p>Funciona em segundo plano e apita quando acabar</p>
+  </div>
+
+  <!-- NOTIF BANNER -->
+  <div class="notif-banner" id="notif-banner">
+    <div class="notif-icon">🔔</div>
+    <div>
+      <b style="color:#fff">Ativar notificações</b><br>
+      Para receber o alerta mesmo com a tela bloqueada ou em outro app.
+      <br><button onclick="pedirNotificacao()">Ativar agora</button>
+    </div>
+  </div>
+
+  <!-- TIMER PRINCIPAL -->
+  <div class="timer-card">
+    <!-- CIRCLE -->
+    <div class="circle-wrap">
+      <svg class="circle-svg" width="220" height="220" viewBox="0 0 220 220">
+        <circle class="circle-bg" cx="110" cy="110" r="100"/>
+        <circle class="circle-progress" id="circle-prog" cx="110" cy="110" r="100"/>
+      </svg>
+      <div class="circle-inner">
+        <div class="timer-display" id="timer-display">00:45</div>
+        <div class="timer-phase" id="timer-phase">exercício</div>
+      </div>
+    </div>
+
+    <!-- PHASE PILLS -->
+    <div class="phase-bar">
+      <div class="phase-pill active-exercise" id="pill-ex">💪 Exercício</div>
+      <div class="phase-pill" id="pill-rest">😮‍💨 Descanso</div>
+    </div>
+
+    <!-- CONTROLS -->
+    <div class="controls">
+      <button class="btn btn-reset" onclick="resetTimer()">↺ Reset</button>
+      <button class="btn btn-play" id="btn-play" onclick="toggleTimer()">▶ Iniciar</button>
+      <button class="btn btn-skip" onclick="skipPhase()">⏭ Pular</button>
+    </div>
+
+    <!-- SERIES INFO -->
+    <div class="series-info">
+      <div class="sinfo">
+        <div class="sinfo-val" id="s-serie" style="color:var(--accent)">1</div>
+        <div class="sinfo-label">Série atual</div>
+      </div>
+      <div class="sinfo">
+        <div class="sinfo-val" id="s-total" style="color:var(--muted)">4</div>
+        <div class="sinfo-label">Total séries</div>
+      </div>
+      <div class="sinfo">
+        <div class="sinfo-val" id="s-fase" style="color:var(--blue)">EX</div>
+        <div class="sinfo-label">Fase</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONFIG -->
+  <div class="config-card">
+    <div class="config-title">⚙️ Configurar</div>
+
+    <div class="config-row">
+      <div class="config-label">
+        Tempo de exercício
+        <span class="config-sub">Duração de cada série</span>
+      </div>
+      <div class="config-right">
+        <button class="num-btn" onclick="ajustar('exercicio', -5)">−</button>
+        <div class="num-val" id="cfg-ex">45s</div>
+        <button class="num-btn" onclick="ajustar('exercicio', 5)">+</button>
+      </div>
+    </div>
+
+    <div class="config-row">
+      <div class="config-label">
+        Tempo de descanso
+        <span class="config-sub">Pausa entre séries</span>
+      </div>
+      <div class="config-right">
+        <button class="num-btn" onclick="ajustar('descanso', -5)">−</button>
+        <div class="num-val" id="cfg-rest">60s</div>
+        <button class="num-btn" onclick="ajustar('descanso', 5)">+</button>
+      </div>
+    </div>
+
+    <div class="config-row">
+      <div class="config-label">
+        Número de séries
+        <span class="config-sub">Quantas séries no total</span>
+      </div>
+      <div class="config-right">
+        <button class="num-btn" onclick="ajustar('series', -1)">−</button>
+        <div class="num-val" id="cfg-series">4</div>
+        <button class="num-btn" onclick="ajustar('series', 1)">+</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRESETS -->
+  <div class="presets-card">
+    <div class="presets-title">⚡ Presets rápidos</div>
+    <div class="presets-grid">
+
+      <button class="preset-btn" onclick="aplicarPreset(45, 60, 4)">
+        <div class="preset-name">💪 Hipertrofia</div>
+        <div class="preset-detail">45s exercício<br>60s descanso · 4 séries</div>
+      </button>
+
+      <button class="preset-btn" onclick="aplicarPreset(30, 45, 3)">
+        <div class="preset-name">🔥 Definição</div>
+        <div class="preset-detail">30s exercício<br>45s descanso · 3 séries</div>
+      </button>
+
+      <button class="preset-btn" onclick="aplicarPreset(60, 90, 5)">
+        <div class="preset-name">🏋️ Força</div>
+        <div class="preset-detail">60s exercício<br>90s descanso · 5 séries</div>
+      </button>
+
+      <button class="preset-btn" onclick="aplicarPreset(20, 10, 8)">
+        <div class="preset-name">⚡ Tabata</div>
+        <div class="preset-detail">20s exercício<br>10s descanso · 8 séries</div>
+      </button>
+
+      <button class="preset-btn" onclick="aplicarPreset(30, 30, 4)">
+        <div class="preset-name">🦵 Abdominais</div>
+        <div class="preset-detail">30s exercício<br>30s descanso · 4 séries</div>
+      </button>
+
+      <button class="preset-btn" onclick="aplicarPreset(60, 60, 3)">
+        <div class="preset-name">🧘 Prancha</div>
+        <div class="preset-detail">60s exercício<br>60s descanso · 3 séries</div>
+      </button>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- ALERT OVERLAY -->
+<div class="alert-overlay" id="alert-overlay">
+  <div class="alert-box">
+    <div class="alert-icon" id="alert-icon">✅</div>
+    <div class="alert-title" id="alert-title">TREINO CONCLUÍDO!</div>
+    <div class="alert-sub" id="alert-sub">Você completou todas as séries. Descansa e bebe água! 💧</div>
+    <button class="alert-btn" onclick="fecharAlert()">Fechar</button>
+  </div>
+</div>
+
+<script>
+  // ─── STATE ───────────────────────────────────────────────
+  let cfg = { exercicio: 45, descanso: 60, series: 4 };
+  let state = {
+    running: false,
+    fase: 'exercicio', // 'exercicio' | 'descanso'
+    serie: 1,
+    segundos: 45,
+    total: 45,
+    interval: null,
+  };
+
+  // ─── AUDIO (Web Audio API — funciona sem arquivos externos) ───
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+  function beep(freq = 880, duration = 0.15, vol = 0.4) {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.frequency.value = freq;
+    osc.type = 'sine';
+    gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+    osc.start(audioCtx.currentTime);
+    osc.stop(audioCtx.currentTime + duration);
+  }
+
+  function beepFim() {
+    // 3 bips de fim de série
+    beep(660, 0.12, 0.5);
+    setTimeout(() => beep(660, 0.12, 0.5), 160);
+    setTimeout(() => beep(880, 0.3, 0.6), 320);
+  }
+
+  function beepConcluido() {
+    // melodia de conclusão
+    [523, 659, 784, 1047].forEach((f, i) => {
+      setTimeout(() => beep(f, 0.25, 0.5), i * 150);
+    });
+  }
+
+  function beepTick() {
+    beep(440, 0.05, 0.2);
+  }
+
+  // ─── NOTIFICAÇÕES ────────────────────────────────────────
+  function pedirNotificacao() {
+    if (!('Notification' in window)) return;
+    Notification.requestPermission().then(p => {
+      if (p === 'granted') {
+        document.getElementById('notif-banner').style.display = 'none';
+      }
+    });
+  }
+
+  function enviarNotif(titulo, corpo) {
+    if (Notification.permission === 'granted') {
+      new Notification(titulo, { body: corpo, icon: '⚡' });
+    }
+  }
+
+  // esconde banner se já tem permissão
+  if (Notification.permission === 'granted') {
+    document.getElementById('notif-banner').style.display = 'none';
+  }
+
+  // ─── WAKE LOCK (mantém tela ligada no celular) ────────────
+  let wakeLock = null;
+  async function pedirWakeLock() {
+    try {
+      if ('wakeLock' in navigator) {
+        wakeLock = await navigator.wakeLock.request('screen');
+      }
+    } catch {}
+  }
+
+  function liberarWakeLock() {
+    if (wakeLock) { wakeLock.release(); wakeLock = null; }
+  }
+
+  // ─── TIMER LOGIC ─────────────────────────────────────────
+  function toggleTimer() {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    state.running = !state.running;
+    const btn = document.getElementById('btn-play');
+    if (state.running) {
+      pedirWakeLock();
+      btn.textContent = '⏸ Pausar';
+      btn.style.background = '#ff6b6b';
+      btn.style.color = '#fff';
+      state.interval = setInterval(tick, 1000);
+    } else {
+      liberarWakeLock();
+      btn.textContent = '▶ Continuar';
+      btn.style.background = 'var(--accent)';
+      btn.style.color = '#000';
+      clearInterval(state.interval);
+    }
+  }
+
+  function tick() {
+    state.segundos--;
+
+    // bips nos últimos 3 segundos
+    if (state.segundos <= 3 && state.segundos > 0) beepTick();
+
+    if (state.segundos <= 0) {
+      beepFim();
+      avancarFase();
+    } else {
+      atualizarUI();
+    }
+  }
+
+  function avancarFase() {
+    if (state.fase === 'exercicio') {
+      // fim de série — começa descanso
+      if (state.serie >= cfg.series) {
+        // acabou tudo!
+        finalizarTreino();
+        return;
+      }
+      state.fase = 'descanso';
+      state.segundos = cfg.descanso;
+      state.total = cfg.descanso;
+      enviarNotif('😮‍💨 Descanse!', `Série ${state.serie}/${cfg.series} concluída. Próxima em ${cfg.descanso}s.`);
+    } else {
+      // fim do descanso — começa exercício
+      state.serie++;
+      state.fase = 'exercicio';
+      state.segundos = cfg.exercicio;
+      state.total = cfg.exercicio;
+      enviarNotif('💪 Próxima série!', `Série ${state.serie}/${cfg.series} — vai!`);
+    }
+    atualizarUI();
+  }
+
+  function finalizarTreino() {
+    clearInterval(state.interval);
+    liberarWakeLock();
+    state.running = false;
+    beepConcluido();
+    enviarNotif('🎉 Treino concluído!', 'Você completou todas as séries. Incrível!');
+
+    // reset btn
+    const btn = document.getElementById('btn-play');
+    btn.textContent = '▶ Iniciar';
+    btn.style.background = 'var(--accent)';
+    btn.style.color = '#000';
+
+    // show overlay
+    document.getElementById('alert-overlay').classList.add('show');
+
+    // reset state
+    setTimeout(() => {
+      state.serie = 1;
+      state.fase = 'exercicio';
+      state.segundos = cfg.exercicio;
+      state.total = cfg.exercicio;
+      atualizarUI();
+    }, 500);
+  }
+
+  function resetTimer() {
+    clearInterval(state.interval);
+    liberarWakeLock();
+    state.running = false;
+    state.fase = 'exercicio';
+    state.serie = 1;
+    state.segundos = cfg.exercicio;
+    state.total = cfg.exercicio;
+    const btn = document.getElementById('btn-play');
+    btn.textContent = '▶ Iniciar';
+    btn.style.background = 'var(--accent)';
+    btn.style.color = '#000';
+    atualizarUI();
+  }
+
+  function skipPhase() {
+    if (!state.running) return;
+    beepFim();
+    avancarFase();
+  }
+
+  // ─── UI UPDATE ───────────────────────────────────────────
+  function atualizarUI() {
+    const s = state.segundos;
+    const min = String(Math.floor(s / 60)).padStart(2, '0');
+    const sec = String(s % 60).padStart(2, '0');
+    document.getElementById('timer-display').textContent = `${min}:${sec}`;
+
+    const isEx = state.fase === 'exercicio';
+    const cor = isEx ? 'var(--accent)' : 'var(--blue)';
+
+    document.getElementById('timer-display').style.color = cor;
+    document.getElementById('timer-phase').textContent = isEx ? 'exercício' : 'descanso';
+    document.getElementById('circle-prog').style.stroke = cor;
+
+    // circle progress
+    const circum = 628;
+    const pct = state.segundos / state.total;
+    document.getElementById('circle-prog').style.strokeDashoffset = circum * (1 - pct);
+
+    // pills
+    document.getElementById('pill-ex').className = 'phase-pill' + (isEx ? ' active-exercise' : '');
+    document.getElementById('pill-rest').className = 'phase-pill' + (!isEx ? ' active-rest' : '');
+
+    // series
+    document.getElementById('s-serie').textContent = state.serie;
+    document.getElementById('s-total').textContent = cfg.series;
+    document.getElementById('s-fase').textContent = isEx ? 'EX' : 'REST';
+    document.getElementById('s-fase').style.color = cor;
+
+    // title (para segundo plano)
+    document.title = `${min}:${sec} ${isEx ? '💪' : '😮‍💨'} — Timer`;
+  }
+
+  // ─── CONFIG ──────────────────────────────────────────────
+  function ajustar(campo, delta) {
+    const mins = { exercicio: 5, descanso: 5, series: 1 };
+    const maxs = { exercicio: 300, descanso: 300, series: 20 };
+    cfg[campo] = Math.max(mins[campo], Math.min(maxs[campo], cfg[campo] + delta));
+    atualizarConfig();
+    if (!state.running) resetTimer();
+  }
+
+  function atualizarConfig() {
+    document.getElementById('cfg-ex').textContent = cfg.exercicio + 's';
+    document.getElementById('cfg-rest').textContent = cfg.descanso + 's';
+    document.getElementById('cfg-series').textContent = cfg.series;
+    document.getElementById('s-total').textContent = cfg.series;
+  }
+
+  function aplicarPreset(ex, rest, series) {
+    cfg.exercicio = ex;
+    cfg.descanso = rest;
+    cfg.series = series;
+    atualizarConfig();
+    resetTimer();
+  }
+
+  function fecharAlert() {
+    document.getElementById('alert-overlay').classList.remove('show');
+  }
+
+  // ─── VISIBILIDADE (segundo plano) ────────────────────────
+  document.addEventListener('visibilitychange', () => {
+    // timer continua rodando — só muda o título
+    if (document.hidden && state.running) {
+      // nada — o setInterval continua
+    }
+  });
+
+  // init
+  atualizarUI();
+  atualizarConfig();
+</script>
+</body>
+</html>
